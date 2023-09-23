@@ -11,17 +11,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 def submit_app(ref):
-    # change the location of the driver on your machine
-    # create ChromeOptions object
-    chrome_options = webdriver.ChromeOptions()
-
-    # add the argument to reuse an existing tab
-    chrome_options.add_argument("--reuse-tab")
-
-    # create the ChromeDriver object
-    driver = webdriver.Chrome(options=chrome_options)
-    driver.get('https://www.wg-gesucht.de/nachricht-senden/' + ref)
-    
     try:
         link = 'https://www.wg-gesucht.de/' + ref
         msg = MIMEMultipart()
@@ -42,6 +31,17 @@ def submit_app(ref):
     except: 
         print('Email not sent')
 
+    # change the location of the driver on your machine
+    # create ChromeOptions object
+    chrome_options = webdriver.ChromeOptions()
+
+    # add the argument to reuse an existing tab
+    chrome_options.add_argument("--reuse-tab")
+
+    # create the ChromeDriver object
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.get('https://www.wg-gesucht.de/nachricht-senden/' + ref)
+    
     driver.implicitly_wait(10)
     accept_button = driver.find_elements("xpath", "//*[contains(text(), 'Accept all')]")[0]
     accept_button.click()
