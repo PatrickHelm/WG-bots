@@ -7,16 +7,28 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import WebDriverException
 FILE = "offers.json"
+
+# -*- coding: utf-8 -*-
 
 while True:
     chrome_options = webdriver.ChromeOptions()
     # add the argument to reuse an existing tab
+    chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument("--reuse-tab") 
-    #chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
+    #chrome_options.add_argument('--disable-dev-shm-usage')
     # create the ChromeDriver object
-    driver = webdriver.Chrome(service=Service("/usr/bin/google-chrome"), options=chrome_options) 
-    driver.get('https://www.wochenanzeiger.de/mietangebote/')
+    driver = webdriver.Chrome(options=chrome_options) #service=Service("/usr/bin/chromedriver"), 
+    link = 'https://www.wochenanzeiger.de/mietangebote/'
+    try:
+        driver.get(link)
+    except WebDriverException:
+        print("Error loading page")
+        driver.quit()
+        sleep(60)
+        continue
     driver.implicitly_wait(10)
     iframe = (driver.find_elements("xpath", '//*[@class="content"]')[0]
     .find_elements("xpath", '//*[@class="mittlereleiste"]')[0]
@@ -38,7 +50,7 @@ while True:
             data_old = json.load(old_file)
     else: data_old = []
     
-    offerstrs = [offer.text for offer in offers]
+    offerstrs = [offer.text.encode('utf-8').decode('utf-8') for offer in offers]
     new_offers = set(offerstrs) - set(data_old)
     
     if new_offers:
@@ -47,7 +59,7 @@ while True:
         msg['Subject'] = 'Neue Wochenanzeigen gefunden!'
         msg['From'] = email
         msg['To'] = email
-        msg.attach(MIMEText('\n'.join(offerstrs)))
+        msg.attach(MIMEText('\n'.join(new_offers + [link])))
 
         mailserver = smtplib.SMTP('smtp.gmail.com', 587)
         mailserver.ehlo()
@@ -57,10 +69,14 @@ while True:
 
         mailserver.sendmail(email, [email], msg.as_string())
         mailserver.quit()
+        print("New offers:")
+        print(new_offers)
+    else:
+        print("No new offers found")
         
     with open(FILE, "w") as new_file:
-        json.dump(offers, new_file)
-
-    sleep(60)
+        json.dump(offerstrs, new_file)
+    driver.quit()
+    sleep(300)
 driver.quit()
 display.stop()

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import WebDriverException
 import time
 import smtplib
 import os
@@ -36,11 +36,19 @@ def submit_app(ref):
     chrome_options = webdriver.ChromeOptions()
 
     # add the argument to reuse an existing tab
-    chrome_options.add_argument("--reuse-tab")
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument("--reuse-tab") 
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument('--disable-dev-shm-usage')
 
     # create the ChromeDriver object
     driver = webdriver.Chrome(options=chrome_options)
-    driver.get('https://www.wg-gesucht.de/nachricht-senden/' + ref)
+    try:
+        driver.get('https://www.wg-gesucht.de/nachricht-senden/' + ref)
+    except WebDriverException:
+        print("Error loading page")
+        driver.quit()
+        return
     
     driver.implicitly_wait(10)
     accept_button = driver.find_elements("xpath", "//*[contains(text(), 'Accept all')]")[0]
@@ -49,10 +57,10 @@ def submit_app(ref):
     konto_button.click()
     driver.implicitly_wait(5)
     email = driver.find_element('id', 'login_email_username')
-    email.send_keys('patrick.p.helm@gmail.com')
+    email.send_keys(os.environ['EMAIL'])
     driver.implicitly_wait(5)
     passwd = driver.find_element('id', 'login_password')
-    passwd.send_keys('84yd_4yWkHLt!8k')
+    passwd.send_keys(os.environ['WG_PW'])
     driver.implicitly_wait(5)
     login_button1 = driver.find_element('id', 'login_submit')
     driver.implicitly_wait(5)
