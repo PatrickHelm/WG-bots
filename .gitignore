@@ -112,3 +112,4 @@ dmypy.json
 *.out
 *.json
 *.dat
+chromedriver
