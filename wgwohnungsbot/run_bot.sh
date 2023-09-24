@@ -1,3 +1,3 @@
 #!/bin/bash
 
-nohup python wg-gesucht.py >> nohup.out 2>&1 &
+nohup xvfb-run python wg-gesucht.py >> nohup.out 2>&1 &
