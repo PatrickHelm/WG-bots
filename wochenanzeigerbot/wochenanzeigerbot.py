@@ -4,6 +4,7 @@ from time import sleep
 import json
 import os
 import smtplib
+import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from webdriver_manager.chrome import ChromeDriverManager
@@ -72,6 +73,7 @@ while True:
         print("New offers:")
         print(new_offers)
     else:
+        print(str(datetime.now()))
         print("No new offers found")
         
     with open(FILE, "w") as new_file:
@@ -79,4 +81,3 @@ while True:
     driver.quit()
     sleep(300)
 driver.quit()
-display.stop()
