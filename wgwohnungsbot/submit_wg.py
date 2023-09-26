@@ -38,8 +38,8 @@ def submit_app(ref):
     # add the argument to reuse an existing tab
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument("--reuse-tab") 
-    chrome_options.add_argument("--headless=new")
-    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument("--headless")
+    #chrome_options.add_argument('--disable-dev-shm-usage')
 
     # create the ChromeDriver object
     driver = webdriver.Chrome(options=chrome_options)
@@ -48,6 +48,7 @@ def submit_app(ref):
     except WebDriverException:
         print("Error loading page")
         driver.quit()
+        time.sleep(60)
         return
     
     driver.implicitly_wait(10)
