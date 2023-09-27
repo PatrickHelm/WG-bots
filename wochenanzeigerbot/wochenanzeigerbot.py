@@ -4,7 +4,7 @@ from time import sleep
 import json
 import os
 import smtplib
-import datetime
+from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from webdriver_manager.chrome import ChromeDriverManager
@@ -52,7 +52,7 @@ while True:
     else: data_old = []
     
     offerstrs = [offer.text.encode('utf-8').decode('utf-8') for offer in offers]
-    new_offers = set(offerstrs) - set(data_old)
+    new_offers = list(set(offerstrs) - set(data_old))
     
     if new_offers:
         msg = MIMEMultipart()
