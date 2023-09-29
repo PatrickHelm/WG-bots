@@ -50,29 +50,32 @@ def submit_app(ref):
         driver.quit()
         time.sleep(60)
         return
-    
-    driver.implicitly_wait(10)
-    accept_button = driver.find_elements("xpath", "//*[contains(text(), 'Accept all')]")[0]
-    accept_button.click()
-    konto_button = driver.find_elements("xpath", "//*[contains(text(), 'Mein Konto')]")[0]
-    konto_button.click()
-    driver.implicitly_wait(5)
-    email = driver.find_element('id', 'login_email_username')
-    email.send_keys(os.environ['EMAIL'])
-    driver.implicitly_wait(5)
-    passwd = driver.find_element('id', 'login_password')
-    passwd.send_keys(os.environ['WG_PW'])
-    driver.implicitly_wait(5)
-    login_button1 = driver.find_element('id', 'login_submit')
-    driver.implicitly_wait(5)
-    login_button1.click()
-    driver.implicitly_wait(5)
+    try:
+        driver.implicitly_wait(10)
+        accept_button = driver.find_elements("xpath", "//*[contains(text(), 'Accept all')]")[0]
+        accept_button.click()
+        konto_button = driver.find_elements("xpath", "//*[contains(text(), 'Bitte loggen Sie sich hier ein')]")[0]
+        konto_button.click()
+        driver.implicitly_wait(5)
+        email = driver.find_element('id', 'login_email_username')
+        email.send_keys(os.environ['EMAIL'])
+        driver.implicitly_wait(5)
+        passwd = driver.find_element('id', 'login_password')
+        passwd.send_keys(os.environ['WG_PW'])
+        driver.implicitly_wait(5)
+        login_button1 = driver.find_element('id', 'login_submit')
+        driver.implicitly_wait(5)
+        login_button1.click()
+        driver.implicitly_wait(5)
+    except:
+        print("Login could not be performed")
+        driver.quit()
+        return
     try:
         se_button1 = driver.find_element('id', 'sicherheit_bestaetigung')
         se_button1.click()
     except:
         print("No sicherheit check")
-
     try:
         timestamp = driver.find_element('id', 'message_timestamp')
         print("Timestamp = ", timestamp)
@@ -80,10 +83,14 @@ def submit_app(ref):
         driver.quit()
     except:
         print("No message has been sent. Will send now...")
-
-    text_area = driver.find_element('id','message_input')
-    text_area.clear()
-    name = driver.find_elements("xpath", "//*[contains(text(), 'Nachricht an')]")[0].text[13:]
+    try:
+        text_area = driver.find_element('id','message_input')
+        text_area.clear()
+        name = driver.find_elements("xpath", "//*[contains(text(), 'Nachricht an')]")[0].text[13:]
+    except:
+        print("No text area found")
+        driver.quit()
+        return
     # read your message from a file
     try:
         message_file = open('./message.txt', 'r', encoding='utf-8')
@@ -93,6 +100,8 @@ def submit_app(ref):
         message_file.close()
     except:
         print("message.txt file not found!")
+        driver.quit()
+        return
     time.sleep(2)
     try:
         anhang_button = driver.find_elements("xpath", "//button[@data-target='#attachment_options_modal']")[0]
