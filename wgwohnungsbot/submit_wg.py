@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import WebDriverException
-import time
-import smtplib
 import os
-
-# Import the email modules we'll need
-from email.mime.text import MIMEText
+import smtplib
+import time
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from selenium import webdriver
+from selenium.common.exceptions import (NoSuchElementException,
+                                        WebDriverException)
 
 
 def submit_app(ref):

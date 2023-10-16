@@ -1,10 +1,11 @@
-from subprocess import call
-import submit_wg
 import json
-from pprint import pprint
 import os.path
 import time
 from datetime import datetime
+from pprint import pprint
+from subprocess import call
+
+import submit_wg
 
 fname = "wg_offer.json"
 
