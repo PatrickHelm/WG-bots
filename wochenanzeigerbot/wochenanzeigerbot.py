@@ -1,5 +1,3 @@
-from selenium import webdriver
-from time import sleep
 import json
 import os
 import smtplib
@@ -7,7 +5,8 @@ from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from selenium.common.exceptions import WebDriverException
-
+from selenium import webdriver
+from time import sleep
 FILE = "offers.json"
 
 # -*- coding: utf-8 -*-

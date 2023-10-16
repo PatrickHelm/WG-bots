@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.common.exceptions import NoSuchElementException
-import time
 import smtplib
 import os
-
-# Import the email modules we'll need
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 

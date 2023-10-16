@@ -1,7 +1,6 @@
 from subprocess import call
 import submit_wg
 import json
-from pprint import pprint
 import os.path
 import time
 from datetime import datetime
