@@ -61,7 +61,7 @@ def submit_app(ref):
         konto_button.click()
         driver.implicitly_wait(5)
         email = driver.find_element("id", "login_email_username")
-        email.send_keys(os.environ["EMAIL"])
+        email.send_keys(os.environ["WG_EMAIL"])
         driver.implicitly_wait(5)
         passwd = driver.find_element("id", "login_password")
         passwd.send_keys(os.environ["WG_PW"])
